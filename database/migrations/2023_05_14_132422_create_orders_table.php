@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id('orderID');
+            $table->increments('orderID');
             $table->string('orderDate');
             $table->string('orderStatus');
             $table->unsignedBigInteger('userID');

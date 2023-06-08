@@ -14,11 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transaction', function (Blueprint $table) {
-            $table->id('transactionID');
+            $table->increments('transactionID');
             $table->date('transactionDate');
             $table->integer('num_of_purchases');
             $table->integer('amount');
-            $table->string('payment_method');
             $table->unsignedBigInteger('productID');
             $table->foreign('productID')->references('productID')->on('products');
             $table->timestamps();

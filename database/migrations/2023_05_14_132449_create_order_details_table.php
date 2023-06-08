@@ -16,13 +16,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('order_details', function (Blueprint $table) {
-            $table->id('orderDetailsID');
+            $table->increments('orderDetailsID');
             $table->integer('price');
-            $table->decimal('disc', 10, 2); // 10 means there are 10 digits in total, including both digits before and after the decimal point and 2 means the numbers behind the decimal point are precised up to 2 decimal places
+            $table->decimal('disc', 3, 2);
             $table->integer('orderQuantity');
             $table->unsignedBigInteger('orderID');
             $table->foreign('orderID')->references('orderID')->on('orders');
-            $table->timestamps();
         });
     }
 

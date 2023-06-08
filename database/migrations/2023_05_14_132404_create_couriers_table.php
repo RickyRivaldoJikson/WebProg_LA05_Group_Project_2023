@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('couriers', function (Blueprint $table) {
-            $table->id('courierID');
+            $table->increments('courierID');
             $table->string('courierName');
-            $table->string('courierRating');
+            $table->decimal('courierRating', $precision = 1, $scale = 2);;
             $table->string('vehicleNumber');
             $table->unsignedBigInteger('shippingID');
             $table->foreign('shippingID')->references('shippingID')->on('shipping');

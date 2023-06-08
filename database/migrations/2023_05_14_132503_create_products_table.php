@@ -14,13 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id('productID');
+            $table->increments('productID');
             $table->string('productName');
-            $table->string('productImg');
+
             $table->integer('price');
             $table->string('description');
-            $table->integer('price');
-            $table->integer('discount'); //  mau langsung harga diskon atau diskon dalam bentuk persen?
+
             $table->integer('productQuantity');
             $table->integer('productRating');
             $table->integer('wishFlag')->default(0); // 1 untuk memasukkan produk ke wishlist dan mewarnai hati sebagai icon wishlist menjadi merah
