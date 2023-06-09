@@ -12,5 +12,5 @@ class Courier extends Model
     use HasFactory;
 
     protected $table = 'couriers';
-    public $fillable = ['courierName', 'courierRating', 'vehicleNumber'];
+    public $fillable = ['name', 'rating', 'vehicleNumber'];
 }

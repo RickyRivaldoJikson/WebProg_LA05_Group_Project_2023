@@ -11,14 +11,14 @@ class Order extends Model
     use HasFactory;
 
     protected $table = 'orders';
-    public $fillable = ['orderDate, orderStatus'];
+    public $fillable = ['date', 'status'];
 
     public function product() {
         return $this -> belongsTo(Product::class);
     }
 
-    public function brand() {
-        return $this -> belongsTo(Brand::class);
+    public function user() {
+        return $this -> belongsTo(User::class);
     }
 
     /*

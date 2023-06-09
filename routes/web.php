@@ -29,8 +29,53 @@ use Illuminate\Support\Facades\Route;
 
 // dengan use App\Http\Controllers\PageController di paling atas untuk mengakses fungsi di PageController untuk view page dan fitur dari aplikasi
 
+Route::get('/', [HomeController::class, 'viewHomepage']) -> name('homepage');
+Route::get('/login', [UserController::class, 'login']) -> name('login');
+Route::post('/login', [UserController::class, 'auth']) -> name('login.submit'); // authenticate user to go to user pages and admin to go to admin pages with features that only admins can access
+Route::get('/register', [UserController::class, 'register']) -> name('register');
+Route::post('/register', [UserController::class, 'storeUserData']) -> name('register.submit'); // store inputted user data to database
+Route::get('/about', [AboutUsController::class, 'viewAboutUs']) -> name('about-us');
+
+// Admin Routes
+Route::middleware(['auth', 'admin']) -> group(function () {
+    // Route::get('/homepage', [AllController::class, 'homepage']) -> name('homepage');
+
+    Route::prefix('/products') -> group(function() {
+        Route::get('/', [ProductController::class, 'viewProducts']) -> name('products');
+        Route::post('/', [ProductController::class, 'storeProduct']) -> name('products.store'); // store inputted product data to database
+        Route::get('/create', [ProductController::class, 'createProduct']) -> name('products.create'); // input product data and post products based on the inputted product data
+        Route::get('/{productID}/edit', [AllController::class, 'editProduct']) -> name('products.edit'); // input product data to update/edit
+        Route::put('/{productID}', [AllController::class, 'updateProduct']) -> name('products.update'); // update product based on inputted product data for updates
+        Route::delete('/{productID}', [AllController::class, 'deleteProduct']) -> name('products.delete');
+    });
+
+    // Route::get('/transactions', [AllController::class, 'viewTransactions']) -> name('transactions.view');
+});
+
+// Customer Routes
+Route::middleware(['auth', 'customer']) -> group(function () {
+    // Route::get('/homepage', [AllController::class, 'homepage']) -> name('homepage');
+    Route::get('/products', [ProductController::class, 'viewProducts']) -> name('products');
+
+    Route::prefix('/cart') -> group(function() {
+        Route::get('/', [CartController::class, 'viewCart']) -> name('cart.view');
+        Route::get('/{cartID}/add', [CartController::class, 'addToCart']) -> name('cart.add');
+        Route::delete('/{cardID}/checkout', [CartController::class, 'editProduct']) -> name('cart.edit');
+        Route::put('/{cartID}/update', [CartController::class, 'updateCart']) -> name('cart.update');
+    });
+
+    Route::prefix('/wishlist') -> group(function() {
+        Route::get('/', [WishlistController::class, 'viewWishlist'])->name('wishlist.view');
+        Route::get('/{wishlistID}/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+        Route::get('/{wishlistID}/delete', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.delete');
+    });
+});
+
+Route::get('/search', [AllController::class, 'search'])->name('search');
 
 
+
+/*
 Route::get('/', function () {
     return view('homepage');
 })->name('homepage');
@@ -64,9 +109,13 @@ Route::prefix('/auth') -> group (function () {
         return view('register');
     })->name('register');
 
+    Route::post('/register', [UserController::class, 'storeUserData'])->name('register.submit');
+
     Route::get('/login', function () {
         return view('login');
     })->name('login');
+
+    Route::post('/login', [UserController::class, 'auth'])->name('login.submit');
 });
 
 Route::prefix('/checkout') -> group (function () {
@@ -92,15 +141,15 @@ Route::prefix('/order/{orderID}', function ($orderID) {
         return view('order-detail');
     })->name('order.detail');
 });
+*/
 
 
 // Route::get('/register', [App\Http\Controllers\PageController::class, 'register']);
 // atau
 // Route::get('/register', [PageController::class, 'register']); // dengan use App\Http\Controllers\PageController di paling atas
 
-
-
-
+/*
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']) -> name('home');
+*/
