@@ -1,37 +1,37 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\AppUser;
-use App\Models\WishlistProduct;
+use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
     public function viewWishlist($userID) {
-        $app_user = AppUser::find($userID);
-        $wishlistProducts = $app_user -> wishlistProducts() -> with('product') -> get();
+        $user = User::find($userID);
+        $wishlist = $user -> wishlist() -> with('product') -> get();
         // with('product') loads product model for each wishlist
 
-        return view('wishlist', ['wishlistProducts' => $wishlistProducts]);
+        return view('wishlist', ['title' => 'Wishlist', 'wishlist' => $wishlist]);
     }
 
     public function addToWishlist(Request $request, $userID) {
-        $app_user = AppUser::find($userID);
-        $productID = $request -> input('productID');
+        $user = User::find($userID);
+        $product = $request -> input('productID');
 
-        $wishlistProduct = new WishlistProduct();
-        $wishlistProduct -> userID = $userID;
-        $wishlistProduct -> productID = $productID;
-        $wishlistProduct -> save();
+        $wishlist = new Wishlist();
+        $wishlist -> user -> userID = $userID;
+        $wishlist -> product -> productID = $productID;
+        $wishlist -> save();
 
         return response() -> json(['message' => 'Product added to the wishlist!']);
     }
 
     public function removeFromWishlist (Request $request) {
-        $app_user = AppUser::find($userID);
-        $productID = $request -> input('productID');
+        $user = User::find($userID);
+        $product = $request -> input('productID');
 
-        WishlistProduct::where('userID', $app_user) -> where('productID', $productID) -> delete();
+        WishlistProduct::where('userID', $app_user) -> where('productID', $product) -> delete();
 
         return response() -> json(['message' => 'Product removed from the wishlist!']);
     }
