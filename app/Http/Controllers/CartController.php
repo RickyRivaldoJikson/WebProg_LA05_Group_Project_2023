@@ -7,8 +7,20 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     public function viewCart() {
-        $cartProducts = session('cart', []);
+        $cart = session('cart', []);
 
-        return view('cart', compact('cartProducts'));
+        return view('cart', compact('cart'), ['title' => 'Cart']);
+    }
+
+    public function addToCart() {
+
+    }
+
+    public function removeFromCart() {
+
+    }
+
+    public function checkout() {
+
     }
 }

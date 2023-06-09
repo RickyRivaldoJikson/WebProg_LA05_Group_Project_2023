@@ -11,7 +11,7 @@
 </body>
 <footer class="text-center fixed-bottom">
     <div class="text-center p-3" style="background-color: white; color: darkcyan;">
-        © 2022 JRamedia Book Store
+        © 2023 Pasar Anime
     </div>
 </footer>
 </html>

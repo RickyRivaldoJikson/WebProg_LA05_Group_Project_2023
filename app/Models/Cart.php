@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WishlistProduct extends Model
+class Cart extends Model
 {
     use HasFactory;
 
     public function user() {
-        return $this -> belongsTo(AppUser::class);
+        return $this -> belongsTo(User::class);
     }
 
-    public function product () {
+    public function product() {
         return $this -> belongsTo(Product::class);
     }
 }

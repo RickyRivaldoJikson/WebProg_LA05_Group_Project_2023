@@ -12,6 +12,12 @@ use App\Models\Shipping;
 use App\Models\Transaction;
 use App\Models\WishlistProduct;
 
+use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 
 use Illuminate\Support\Facades\Route;
@@ -29,8 +35,60 @@ use Illuminate\Support\Facades\Route;
 
 // dengan use App\Http\Controllers\PageController di paling atas untuk mengakses fungsi di PageController untuk view page dan fitur dari aplikasi
 
+Route::get('/', [HomeController::class, 'viewHomepage']) -> name('homepage');
+Route::get('/login', [UserController::class, 'login']) -> name('login');
+Route::post('/login', [UserController::class, 'auth']) -> name('login.submit'); // authenticate user to go to user pages and admin to go to admin pages with features that only admins can access
+Route::get('/register', [UserController::class, 'register']) -> name('register');
+Route::post('/register', [UserController::class, 'storeUserData']) -> name('register.submit'); // store inputted user data to database
+Route::get('/about', [AboutUsController::class, 'viewAboutUs']) -> name('about-us');
+
+// Admin Routes
+Route::middleware(['auth', 'admin']) -> group(function () {
+    // Route::get('/homepage', [AllController::class, 'homepage']) -> name('homepage');
+
+    Route::prefix('/products') -> group(function() {
+        Route::get('/', [ProductController::class, 'viewProducts']) -> name('products.view');
+        Route::get('/create', [ProductController::class, 'postProducts']) -> name('products.post'); // input product data to add or post to the Pasar Anime web page
+        Route::post('/', [ProductController::class, 'addProducts']) -> name('products.add'); // store inputted product data to database and post products based on the inputted product data
+        Route::get('/{product}/edit', [ProductController::class, 'editProducts']) -> name('products.edit'); // input product data to update/edit
+        Route::put('/{product}', [ProductController::class, 'updateProducts']) -> name('products.update'); // update product based on inputted product data for updates
+        Route::delete('/{product}', [ProductController::class, 'deleteProducts']) -> name('products.delete');
+    });
+
+    // Route::get('/transactions', [AllController::class, 'viewTransactions']) -> name('transactions.view');
+});
+
+// Customer Routes
+Route::middleware(['auth', 'customer']) -> group(function () {
+    // Route::get('/homepage', [AllController::class, 'homepage']) -> name('homepage');
+    Route::get('/products', [ProductController::class, 'viewProducts']) -> name('products.view');
+
+    Route::prefix('/category') -> group(function() {
+        Route::get('/{category}', [CategoryController::class, 'redirectCategory'])->name('category.redirect');
+        Route::get('/clothes', [CategoryController::class, 'viewClothes']) -> name('clothes.view');
+        Route::get('/figure', [CartController::class, 'viewFigures']) -> name('figure.view');
+        Route::get('/keychain', [CartController::class, 'viewKeychains']) -> name('keychain.view');
+        Route::get('/manga', [CartController::class, 'viewMangas']) -> name('manga.view');
+        Route::get('/stationary', [CartController::class, 'viewStationaries']) -> name('stationary.view');
+    });
+
+    Route::prefix('/cart') -> group(function() {
+        Route::get('/', [CartController::class, 'viewCart']) -> name('cart.view');
+        Route::get('/{cartID}/add', [CartController::class, 'addToCart']) -> name('cart.add');
+        Route::delete('/{cardID}/checkout', [CartController::class, 'editProduct']) -> name('cart.edit');
+        Route::put('/{cartID}/update', [CartController::class, 'updateCart']) -> name('cart.update');
+    });
+
+    Route::prefix('/wishlist') -> group(function() {
+        Route::get('/', [WishlistController::class, 'viewWishlist']) -> name('wishlist.view');
+        Route::get('/{wishlistID}/add', [WishlistController::class, 'addToWishlist']) -> name('wishlist.add');
+        Route::get('/{wishlistID}/delete', [WishlistController::class, 'removeFromWishlist']) -> name('wishlist.delete');
+    });
+});
 
 
+
+/*
 Route::get('/', function () {
     return view('homepage');
 })->name('homepage');
@@ -64,9 +122,13 @@ Route::prefix('/auth') -> group (function () {
         return view('register');
     })->name('register');
 
+    Route::post('/register', [UserController::class, 'storeUserData'])->name('register.submit');
+
     Route::get('/login', function () {
         return view('login');
     })->name('login');
+
+    Route::post('/login', [UserController::class, 'auth'])->name('login.submit');
 });
 
 Route::prefix('/checkout') -> group (function () {
@@ -92,15 +154,15 @@ Route::prefix('/order/{orderID}', function ($orderID) {
         return view('order-detail');
     })->name('order.detail');
 });
+*/
 
 
 // Route::get('/register', [App\Http\Controllers\PageController::class, 'register']);
 // atau
 // Route::get('/register', [PageController::class, 'register']); // dengan use App\Http\Controllers\PageController di paling atas
 
-
-
-
+/*
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']) -> name('home');
+*/

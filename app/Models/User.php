@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Transaction;
+use App\Models\Wishlist;
 
 class User extends Authenticatable
 {
@@ -18,9 +23,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'role',
+        'address',
+        'phone',
     ];
 
     /**
@@ -41,4 +49,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function product() {
+        return $this -> hasMany(Product::class);
+    }
+
+    public function order() {
+        return $this -> hasMany(Order::class);
+    }
+
+    public function transaction() {
+        return $this -> hasMany(Transaction::class);
+    }
+
+    public function cart() {
+        return $this -> hasMany(Cart::class);
+    }
+
+    public function wishlist() {
+        return $this -> hasMany(Wishlist::class);
+    }
 }
